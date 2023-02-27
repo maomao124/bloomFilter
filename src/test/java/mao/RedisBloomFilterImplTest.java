@@ -58,4 +58,18 @@ class RedisBloomFilterImplTest
         System.out.println(filter44);
     }
 
+    @Test
+    void exists()
+    {
+        System.out.println(redisBloomFilter.exists("filter3", "1"));
+        System.out.println(redisBloomFilter.exists("filter3", "2"));
+        System.out.println(redisBloomFilter.exists("filter3", "4"));
+        System.out.println(redisBloomFilter.exists("filter3", "5"));
+        System.out.println(redisBloomFilter.exists("filter3", "6"));
+        System.out.println(redisBloomFilter.exists("filter3", "9"));
+
+        System.out.println(redisBloomFilter.exists("filter4", "6"));
+        System.out.println(redisBloomFilter.exists("filter4", "7"));
+        System.out.println(redisBloomFilter.exists("filter4", "9"));
+    }
 }

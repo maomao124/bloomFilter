@@ -329,9 +329,35 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
                 list.add(false);
                 continue;
             }
-            throw new RuntimeException(Objects.requireNonNull(s).toString());
+            throw new RuntimeException(Objects.requireNonNull(s));
         }
         return list;
+    }
+
+
+
+    /**
+     * 确定元素是否在布隆过滤器中存在
+     *
+     * @param filterKey 布隆过滤器的名称
+     * @param item      添加的元素
+     * @return boolean 如果存在，则为true，反之为false
+     */
+    public boolean exists(String filterKey, String item)
+    {
+        //发送命令
+        this.sendRequest("BF.EXISTS", filterKey, item);
+        //读取结果
+        String response = Objects.requireNonNull(this.getResponse()).toString();
+        if (Objects.equals(response, "1"))
+        {
+            return true;
+        }
+        if (Objects.equals(response, "0"))
+        {
+            return false;
+        }
+        throw new RuntimeException(Objects.requireNonNull(response));
     }
 
 
@@ -349,5 +375,8 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
         {
             System.out.println(s1);
         }
+
+        bloomFilter.sendRequest("BF.EXISTS", "filter", "1");
+        System.out.println(bloomFilter.getResponse());
     }
 }
