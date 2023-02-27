@@ -361,6 +361,48 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
     }
 
 
+    /**
+     * 确定一个或者多个元素是否在布隆过滤器中存在
+     * 该命令的操作方式`BF.EXISTS`与之相同，只不过它允许多个输入并返回多个值。
+     *
+     * @param filterKey 布隆过滤器的名称
+     * @param items     添加的元素
+     * @return {@link List}<{@link Boolean}>
+     */
+    public List<Boolean> mExists(String filterKey, String... items)
+    {
+        if (filterKey == null)
+        {
+            return null;
+        }
+
+        String[] args = new String[items.length + 2];
+        args[0] = "BF.MEXISTS";
+        args[1] = filterKey;
+        System.arraycopy(items, 0, args, 2, items.length);
+        sendRequest(args);
+        String r = getResponse().toString();
+        r = r.substring(1, r.length() - 1);
+        String[] split = r.split(", ");
+        List<Boolean> list = new ArrayList<>(items.length);
+        for (String s : split)
+        {
+            if (Objects.equals(s, "1"))
+            {
+                list.add(true);
+                continue;
+            }
+            if (Objects.equals(s, "0"))
+            {
+                list.add(false);
+                continue;
+            }
+            throw new RuntimeException(Objects.requireNonNull(s));
+        }
+        return list;
+    }
+
+
     public static void main(String[] args)
     {
         RedisBloomFilterImpl bloomFilter = new RedisBloomFilterImpl("127.0.0.1", 16379);

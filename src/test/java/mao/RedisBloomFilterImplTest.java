@@ -72,4 +72,19 @@ class RedisBloomFilterImplTest
         System.out.println(redisBloomFilter.exists("filter4", "7"));
         System.out.println(redisBloomFilter.exists("filter4", "9"));
     }
+
+    @Test
+    void mExists()
+    {
+        List<Boolean> filter3 = redisBloomFilter.mExists
+                ("filter3", "1", "2", "3", "4", "5", "6", "7", "8");
+        System.out.println(filter3);
+
+        List<Boolean> filter4 = redisBloomFilter.mExists(
+                "filter4", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+        );
+        System.out.println(filter4);
+    }
+
+
 }
