@@ -28,6 +28,14 @@
             <artifactId>guava</artifactId>
             <version>28.0-jre</version>
         </dependency>
+
+        <!-- 测试框架 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -280,7 +280,7 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
         //发送命令
         this.sendRequest("BF.ADD", filterKey, item);
         //读取结果
-        Object response = this.getResponse();
+        String response = Objects.requireNonNull(this.getResponse()).toString();
         if (Objects.equals(response, "1"))
         {
             return true;
