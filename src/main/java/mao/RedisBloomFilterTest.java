@@ -51,5 +51,7 @@ public class RedisBloomFilterTest
 
         System.out.println("预期结果：1000，最终结果：" + count);
         System.out.println();
+
+        redisBloomFilter.close();
     }
 }
