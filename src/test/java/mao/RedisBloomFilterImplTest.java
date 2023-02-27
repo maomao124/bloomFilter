@@ -87,4 +87,10 @@ class RedisBloomFilterImplTest
     }
 
 
+    @Test
+    void reserve()
+    {
+        System.out.println(redisBloomFilter.reserve("filter5", 0.002f, 2000));
+        System.out.println(redisBloomFilter.reserve("filter6", 0.002f, 2000));
+    }
 }

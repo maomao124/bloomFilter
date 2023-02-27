@@ -335,7 +335,6 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
     }
 
 
-
     /**
      * 确定元素是否在布隆过滤器中存在
      *
@@ -400,6 +399,39 @@ public class RedisBloomFilterImpl implements RedisBloomFilter
             throw new RuntimeException(Objects.requireNonNull(s));
         }
         return list;
+    }
+
+
+    /**
+     * 储备
+     *
+     * @param filterKey  布隆过滤器的名称
+     * @param error_rate 期望的误报率。该值必须介于 0 到 1 之间。例如，对于期望的误报率 0.1％（1000 中为 1），
+     *                   error_rate 应该设置为 0.001。
+     *                   该数字越接近零，则每个项目的内存消耗越大，并且每个操作的 CPU 使用率越高。
+     * @param capacity   过滤器的容量。当实际存储的元素个数超过这个值之后，性能将开始下降。
+     *                   实际的降级将取决于超出限制的程度。随着过滤器元素数量呈指数增长，性能将线性下降。
+     * @return boolean
+     */
+    public boolean reserve(String filterKey, float error_rate, int capacity)
+    {
+        if (error_rate > 1 || error_rate < 0)
+        {
+            throw new RuntimeException("期望的误报率应该在0到1之间");
+        }
+        if (capacity <= 0)
+        {
+            throw new RuntimeException("过滤器的容量必须要大于0");
+        }
+        //发送命令
+        this.sendRequest("BF.RESERVE", filterKey, String.valueOf(error_rate), String.valueOf(capacity));
+        //读取结果
+        String response = Objects.requireNonNull(this.getResponse()).toString();
+        if (Objects.equals(response, "OK"))
+        {
+            return true;
+        }
+        throw new RuntimeException(Objects.requireNonNull(response));
     }
 
 
